@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c1akjfnxqqofw"]
+
+[ext_resource type="Texture2D" uid="uid://bihqtllyu1s2" path="res://assets/crab-a.svg" id="1_4dvvg"]
+[ext_resource type="Script" uid="uid://dj6chqef6f1jo" path="res://src/sprite_2d.gd" id="1_6e84v"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(404, 227)
+texture = ExtResource("1_4dvvg")
+script = ExtResource("1_6e84v")
