@@ -8,6 +8,8 @@ func _ready() -> void:
 
 func _test01()->void:
 	contour_detection = ContourDetection.new()
+	contour_detection.call_test()
+	#return
 	var image:Image = sprite.texture.get_image()
 	var _texture:ImageTexture = ImageTexture.new()
 	var _image:Image = Image.create(image.get_size().x+10, image.get_size().y+10, false, Image.FORMAT_RGBA8)

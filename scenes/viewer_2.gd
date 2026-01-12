@@ -9,6 +9,7 @@ func _ready() -> void:
 	_test01()
 
 func _test01()->void:
+	#return
 	var image:Image = sprite.texture.get_image()
 	var _texture:ImageTexture = ImageTexture.new()
 	var _image:Image = Image.create(image.get_size().x+2, image.get_size().y+10, false, Image.FORMAT_RGBA8)
