@@ -1,11 +1,3 @@
-'''
-REF https://github.com/RajdeepMondal/Contour-Detection/blob/master/contour%20detection.py
-Gdscriptへ移植中
-TODO
-(1) 縦方向に連続する直線上の境界　描画されない( 仕様なのかバグなのか判別できず )
-(2) parent が 1, 2, 1, 3, 1, 4, ・・・と 1つおきに 1 が出現、他は 昇順。よいのか？（仕様がわからない )
-
-'''
 class_name ContourDetection
 # four-connected case
 """
