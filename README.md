@@ -19,7 +19,7 @@ but I rewrote it using GDScript.
 ## Draw points at intervals of 10 ms
 ![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample03.gif)
 
-# Results-2 (Cat)
+# Results-2 (Crab)
 ## original
 ![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample04.PNG)
 
