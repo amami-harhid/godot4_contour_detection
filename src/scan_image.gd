@@ -13,8 +13,8 @@ func _init(_image: Image):
 	_img = []
 	_img_init = []
 	var size:Vector2i = image.get_size()
-	rows = size.y + 10
-	cols = size.x + 10
+	rows = size.y
+	cols = size.x
 
 	for i in range(rows): # 縦方向
 		if i == 0 or i == rows-1:
@@ -38,8 +38,8 @@ func _init(_image: Image):
 
 func get_pixcel(img: Image, i:int, j:int)->Color:
 	var size = img.get_size()
-	if 5 < i and 5<j and i < size.y+5 and j < size.x+5:
-		var _px:Color = img.get_pixel(j-5, i-5) # x=j, y=i
+	if 0< i and 0<j and i < size.y and j < size.x:
+		var _px:Color = img.get_pixel(j, i) # x=j, y=i
 		return _px
 	return Color(0,0,0,0)
 	

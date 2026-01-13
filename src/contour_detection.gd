@@ -14,24 +14,24 @@ Direction Reference:
 """
 func _next_cell(curr_pixel:Cell,curr_dir:int)->CellInfo:
 	var _curr_pixel:Cell = curr_pixel.duplicate()
-	var _rtn_cell_info:CellInfo = CellInfo.new()
-	_rtn_cell_info.save = null
+	var _next_cell_info:CellInfo = CellInfo.new()
+	_next_cell_info.save = null
 	
 	if curr_dir == 0 : #DIR.RIGHT:
-		_rtn_cell_info.exam = Cell.new(_curr_pixel.i-1, _curr_pixel.j)
-		_rtn_cell_info.new_dir = 1 #DIR.UP
-		_rtn_cell_info.save = Cell.new(_curr_pixel.i, _curr_pixel.j+1)
+		_next_cell_info.exam = Cell.new(_curr_pixel.i-1, _curr_pixel.j)
+		_next_cell_info.new_dir = 1 #DIR.UP
+		_next_cell_info.save = Cell.new(_curr_pixel.i, _curr_pixel.j+1)
 	elif curr_dir == 1: #DIR.UP:
-		_rtn_cell_info.exam = Cell.new(_curr_pixel.i, _curr_pixel.j-1)
-		_rtn_cell_info.new_dir = 2  #DIR.LEFT
+		_next_cell_info.exam = Cell.new(_curr_pixel.i, _curr_pixel.j-1)
+		_next_cell_info.new_dir = 2  #DIR.LEFT
 	elif curr_dir == 2: #DIR.LEFT:
-		_rtn_cell_info.exam = Cell.new(_curr_pixel.i+1, _curr_pixel.j)
-		_rtn_cell_info.new_dir = 3  #DIR.DOWN
+		_next_cell_info.exam = Cell.new(_curr_pixel.i+1, _curr_pixel.j)
+		_next_cell_info.new_dir = 3  #DIR.DOWN
 	elif curr_dir == 3: #DIR.DOWN:
-		_rtn_cell_info.exam = Cell.new(_curr_pixel.i, _curr_pixel.j+1)
-		_rtn_cell_info.new_dir = 0 #DIR.RIGHT
+		_next_cell_info.exam = Cell.new(_curr_pixel.i, _curr_pixel.j+1)
+		_next_cell_info.new_dir = 0 #DIR.RIGHT
 	
-	return _rtn_cell_info	#{"r":r, "c":c, "new_dir":new_dir, "save_pixel":save}
+	return _next_cell_info	#{"r":r, "c":c, "new_dir":new_dir, "save_pixel":save}
 
 func _border_follow(img:ScanImage,start:Cell, prev:Cell, direction:int,NBD:int)->Contour:
 	var _start:Cell = start.duplicate()

@@ -22,6 +22,9 @@ func equals(target:Cell)->bool:
 		return true
 	else:
 		return false
-		
+
+func to_vector2()->Vector2:
+	return Vector2(j-1, i-1)
+
 func _to_string() -> String:
 	return "[parent=%d,i=%d,j=%d]"%[parent,i,j]

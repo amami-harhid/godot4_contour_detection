@@ -9,10 +9,12 @@ func _test01()->void:
 	
 	var _texture:ImageTexture = ImageTexture.new()
 	var _image:Image = Image.create(
-		org_image.get_size().x+10, 
-		org_image.get_size().y+10, 
+#		org_image.get_size().x+10,
+#		org_image.get_size().y+10, 
+		org_image.get_size().x,
+		org_image.get_size().y, 
 		false, Image.FORMAT_RGBA8)
-	_image.fill(Color(1,1,1,1))
+	_image.fill(Color(1,1,1,0))
 	_texture.set_image(_image)
 	self.texture = _texture	
 
@@ -21,13 +23,15 @@ func _test01()->void:
 	var obj = _contour_detection.raster_scan(org_image)
 	var contours = obj.contours
 	#await get_tree().create_timer(3).timeout
+	var count=0
 	for _contour in obj.contours:
 		for cell:Cell in _contour.list():
-			_image.set_pixel(cell.j, cell.i, Color(0,0,0,1))
+			var _pos = cell.to_vector2()
+			_image.set_pixel(_pos.x, _pos.y, Color(0,0,0,1))
 			_texture.set_image(_image)
 			self.texture = _texture	
-			#await get_tree().create_timer(0.01).timeout
-		
+			await get_tree().create_timer(0.001).timeout
+	print("count=",count)
 func _custom_sort(a:Cell, b:Cell) -> bool:
 	if a.parent < b.parent:
 		return false
