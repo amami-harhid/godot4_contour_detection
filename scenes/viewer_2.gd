@@ -25,6 +25,6 @@ func _test01()->void:
 		for j in img.rows:
 			if img.get_init_value_i(j, i) > 0:
 				_image.set_pixel(i, j, Color(0,0,0,1))
-
+			
 	_texture.set_image(_image)
 	self.texture = _texture	

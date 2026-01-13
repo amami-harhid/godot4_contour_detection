@@ -15,6 +15,8 @@ The original detection program code was written in Python, but I rewrote it usin
 ## Contour tracing
 ![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample03.PNG)
 
+![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample03.gif)
+
 # Results-2 (Cat)
 ## original
 ![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample04.PNG)
@@ -25,6 +27,7 @@ The original detection program code was written in Python, but I rewrote it usin
 ## Contour tracing
 ![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample06.PNG)
 
+![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample06.gif)
 
 
 # state
