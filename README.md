@@ -2,7 +2,8 @@
 
 This is a Suzuki85 edge detection program code written in GDScript.
 
-The original detection program code was written in Python, but I rewrote it using GDScript.
+The original detection program code ([Rajdeep Mondal](https://github.com/RajdeepMondal)) was written in Python, 
+but I rewrote it using GDScript.
 
 
 # Results-1 (Box)
@@ -69,8 +70,8 @@ The current state is being debugged.
 
 # Reference
 
-## python code
-https://github.com/RajdeepMondal/Contour-Detection/blob/master/contour%20detection.py
+## python code ( original )
+https://github.com/RajdeepMondal/Contour-Detection/blob/master
 
 ## Related Articles
 https://theailearner.com/tag/suzuki-contour-algorithm-opencv/
