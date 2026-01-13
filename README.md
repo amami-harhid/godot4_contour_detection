@@ -15,6 +15,7 @@ The original detection program code was written in Python, but I rewrote it usin
 ## Contour tracing
 ![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample03.PNG)
 
+## Draw points at intervals of 10 ms
 ![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample03.gif)
 
 # Results-2 (Cat)
@@ -27,8 +28,41 @@ The original detection program code was written in Python, but I rewrote it usin
 ## Contour tracing
 ![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample06.PNG)
 
+## Draw points at intervals of 10 ms
 ![demo](https://raw.githubusercontent.com/wiki/amami-harhid/godot_sprite2d_ext/images/contour_detection_sample06.gif)
 
+
+# usage sample
+
+```
+	var sprite:Sprite2D = $"../Sprite2D" # sprite original image
+	var org_image:Image = sprite.texture.get_image()
+	
+    # create new Image
+	var _texture:ImageTexture = ImageTexture.new()
+	var _image:Image = Image.create(
+		org_image.get_size().x+10,
+		org_image.get_size().y+10, 
+		false, Image.FORMAT_RGBA8)
+	_image.fill(Color(1,1,1,1))
+	_texture.set_image(_image)
+	self.texture = _texture	
+
+    # get contours
+	var _contour_detection:ContourDetection = ContourDetection.new()
+	self.contour_detection = _contour_detection
+	var obj_detection = _contour_detection.raster_scan(org_image)
+
+    # draw contours
+	for _contour in obj_detection.contours:
+		for cell:Cell in _contour.list():
+			_image.set_pixel(cell.j, cell.i, Color(0,0,0,1))
+			_texture.set_image(_image)
+			self.texture = _texture
+            await get_tree().create_timer(0.01).timeout
+
+
+```
 
 # state
 The current state is being debugged.
