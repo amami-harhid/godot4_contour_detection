@@ -39,7 +39,7 @@ but I rewrote it using GDScript.
 	var sprite:Sprite2D = $"../Sprite2D" # sprite original image
 	var org_image:Image = sprite.texture.get_image()
 	
-    # create new Image
+    # create new ImageTexture
 	var _texture:ImageTexture = ImageTexture.new()
 	var _image:Image = Image.create(
 		org_image.get_size().x+10,
@@ -51,7 +51,6 @@ but I rewrote it using GDScript.
 
     # get contours
 	var _contour_detection:ContourDetection = ContourDetection.new()
-	self.contour_detection = _contour_detection
 	var obj_detection = _contour_detection.raster_scan(org_image)
 
     # draw contours
