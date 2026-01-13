@@ -21,40 +21,25 @@ Direction Reference:
 
 """
 func _next_cell(curr_pixel:Cell,curr_dir:int)->CellInfo:
-	#var i:int = curr_pixel.i
-	#var j:int = curr_pixel.j
 	var _curr_pixel:Cell = curr_pixel.duplicate()
-	#var save : Array[int]
-	#var r:int = -int(INF)
-	#var c:int = -int(INF)
-	#var new_dir:int = curr_dir
-	var cell_info:CellInfo = CellInfo.new()
-	cell_info.save = null
+	var _rtn_cell_info:CellInfo = CellInfo.new()
+	_rtn_cell_info.save = null
 	
 	if curr_dir == 0 : #DIR.RIGHT:
-		#cell_info.r = i -1
-		#cell_info.c = j
-		#cell_info.exam = Cell.new(i-1, j)
-		cell_info.exam = Cell.new(_curr_pixel.i-1, _curr_pixel.j)
-		cell_info.new_dir = 1 #DIR.UP
-		cell_info.save = Cell.new(_curr_pixel.i, _curr_pixel.j+1)
+		_rtn_cell_info.exam = Cell.new(_curr_pixel.i-1, _curr_pixel.j)
+		_rtn_cell_info.new_dir = 1 #DIR.UP
+		_rtn_cell_info.save = Cell.new(_curr_pixel.i, _curr_pixel.j+1)
 	elif curr_dir == 1: #DIR.UP:
-		#cell_info.r = i
-		#cell_info.c = j -1
-		cell_info.exam = Cell.new(_curr_pixel.i, _curr_pixel.j-1)
-		cell_info.new_dir = 2  #DIR.LEFT
+		_rtn_cell_info.exam = Cell.new(_curr_pixel.i, _curr_pixel.j-1)
+		_rtn_cell_info.new_dir = 2  #DIR.LEFT
 	elif curr_dir == 2: #DIR.LEFT:
-		#cell_info.r = i +1
-		#cell_info.c = j
-		cell_info.exam = Cell.new(_curr_pixel.i+1, _curr_pixel.j)
-		cell_info.new_dir = 3  #DIR.DOWN
+		_rtn_cell_info.exam = Cell.new(_curr_pixel.i+1, _curr_pixel.j)
+		_rtn_cell_info.new_dir = 3  #DIR.DOWN
 	elif curr_dir == 3: #DIR.DOWN:
-		#cell_info.r = i
-		#cell_info.c = j +1
-		cell_info.exam = Cell.new(_curr_pixel.i, _curr_pixel.j+1)
-		cell_info.new_dir = 0 #DIR.RIGHT
+		_rtn_cell_info.exam = Cell.new(_curr_pixel.i, _curr_pixel.j+1)
+		_rtn_cell_info.new_dir = 0 #DIR.RIGHT
 	
-	return cell_info	#{"r":r, "c":c, "new_dir":new_dir, "save_pixel":save}
+	return _rtn_cell_info	#{"r":r, "c":c, "new_dir":new_dir, "save_pixel":save}
 
 func _border_follow(img:ScanImage,start:Cell, prev:Cell, direction:int,NBD:int)->Contour:
 	var _start:Cell = start.duplicate()
@@ -64,34 +49,21 @@ func _border_follow(img:ScanImage,start:Cell, prev:Cell, direction:int,NBD:int)-
 	var _dir:int = direction
 	var _save: Cell = null
 	var _save2:Cell = _exam.duplicate()
-	#var save_pixel: Array[int]
-	#var contour:Array[Array] = []
 	var contour:Contour = Contour.new()	
 	contour.append(_curr.duplicate())
 	while img.get_value(_exam) == 0:  # while None
 		var cell_info:CellInfo = _next_cell(_curr,_dir)
 		_exam = cell_info.exam.duplicate()
-		#print("(3)exam=", exam)
 		_dir = cell_info.new_dir
-		#save_pixel = obj.save
-		#print("(4)")
 		if cell_info.save != null :
-			#print("(5)")
 			_save = cell_info.save.duplicate()
 		#print("(6)")
 		if _save2.equals(_exam):
-			#print("(7)")
-			#print("save2=",save2, ", exam=",exam)
 			img.set_value(_curr, -NBD)
-			#print("last contour(1)=", contour)
-			#print("(8)contour=", contour)
 			contour.direction = _dir
 			contour.img = img
 			return contour
-		#print("(9)")
 
-	#print("[0]_prev=",_prev, ",_curr=",_curr,"_dir=",_dir)
-	#print("(10)")
 	if _save != null:
 		img.set_value(_curr, -NBD)
 		_save = null
@@ -101,8 +73,6 @@ func _border_follow(img:ScanImage,start:Cell, prev:Cell, direction:int,NBD:int)-
 		pass
 	_prev = _curr.duplicate()
 	_curr = _exam.duplicate()
-
-	#print("[1]_prev=",_prev, ",_curr=",_curr,"_dir=",_dir)
 	contour.append(_curr.duplicate())
 	if _dir >= 2 :
 		_dir = _dir - 2
@@ -111,57 +81,20 @@ func _border_follow(img:ScanImage,start:Cell, prev:Cell, direction:int,NBD:int)-
 	var flag:int = 0
 	var _start_next : Cell = _curr.duplicate()
 	
-	#print("(11)")
-	var _counter = 0
 	while true:
-		if _counter > 100:
-			break
-		_counter+= 1
-		#print("curr.equals(start_next)", _curr.equals(_start_next))
-		#print("prev.equals(start)", _prev.equals(_start))
-		#print("flag == 1", flag == 1)
-		#print("[2]_prev=",_prev, ",_curr=",_curr,",_exam=",_exam,"_dir=",_dir)
 		if not( _curr.equals(_start_next) and _prev.equals(_start) and flag == 1 ):
-			#print("(13)")
 			flag = 1
-			#print("(14)")
-			#print("[3_0]_prev=",_prev, ",_curr=",_curr,",_exam=",_exam,"_dir=",_dir)
-			var cell_info = _next_cell(_curr, _dir)
-			_exam = cell_info.exam.duplicate()
-			_dir = cell_info.new_dir
-			#print("[3_1]_prev=",_prev, ",_curr=",_curr,",_exam=",_exam,"_dir=",_dir)
-			#print("(15)")
-			if cell_info.save != null :
-				_save = cell_info.save.duplicate()
-			#print("(16)")
-			var _counter2 = 0
-			while true: # img.get_value(_exam) == 0:
-				var _exam_value = img.get_value(_exam);
-				#print("[4_0] img.cols, rows=", img.cols, ",",img.rows)
-				#print("[4_0] _exam=",_exam, ",img.get_value(_exam)=",_exam_value)
-				if _exam_value != 0:
-					#print("[4_break]")
-					break
-				# TODO:  この無限ループを抜けることができない
-				# [4_0]_prev=[parent=0,i=7,j=223],_curr=[parent=0,i=6,j=223],_exam=[parent=0,i=5,j=223]_dir=0
-				# [4_1]_prev=[parent=0,i=7,j=223],_curr=[parent=0,i=6,j=223],_exam=[parent=0,i=5,j=223]_dir=0
-				# 上の２つの状態の繰り返しになる。
-				# _dir 値が変化しないのが不思議？？
-				# セル配列の境界に達したときにこの事象が起きているのだが、_dirが変化しない理由がわからない。
-				
-				# _dir を変えながら 0 のピクセルを探す
-				#if _counter2 > 100:
-				#	break
-				_counter2 += 1
-				#print("[4_1]_prev=",_prev, ",_curr=",_curr,",_exam=",_exam,",_dir=",_dir, ",_counter2=",_counter2)
-				var _cell_info:CellInfo = _next_cell(_curr, _dir)
-				_exam = _cell_info.exam.duplicate()
-				_dir = _cell_info.new_dir
-				if _cell_info.save != null:
-					# save: _dir=0(right) のとき j + 1 のピクセルを返す
-					_save = _cell_info.save.duplicate()
-				#print("[4_2]_prev=",_prev, ",_curr=",_curr,",_exam=",_exam,",_dir=",_dir)
-				#contour.append(_curr.duplicate())
+			var _cell_info_a = _next_cell(_curr, _dir)
+			_exam = _cell_info_a.exam.duplicate()
+			_dir = _cell_info_a.new_dir
+			if _cell_info_a.save != null :
+				_save = _cell_info_a.save.duplicate()
+			while img.get_value(_exam) == 0:
+				var _cell_info_b:CellInfo = _next_cell(_curr, _dir)
+				_exam = _cell_info_b.exam.duplicate()
+				_dir = _cell_info_b.new_dir
+				if _cell_info_b.save != null:
+					_save = _cell_info_b.save.duplicate()
 				
 			if _save != null and img.get_value(_save)==0:
 				img.set_value(_curr,-NBD)
@@ -178,21 +111,12 @@ func _border_follow(img:ScanImage,start:Cell, prev:Cell, direction:int,NBD:int)-
 			else:
 				_dir = _dir +2
 		else:
-			print("break")
 			break
 	#print("last contour(2)=", contour)
 	contour.direction = _dir
 	contour.img = img
 	return contour
 
-func test(curr:Cell, dir:int)->void:
-	var _cell_info:CellInfo = _next_cell(curr, dir)
-	print("_cell_info.exam=",_cell_info.exam)
-	print("_cell_info.new_dir=",_cell_info.new_dir)
-
-func call_test()->void:
-	var curr:Cell = Cell.new(6, 223)
-	test(curr,0)
 
 func raster_scan(image: Image) -> RasterScan:
 	self.scan_img = ScanImage.new(image)
@@ -258,9 +182,6 @@ func raster_scan(image: Image) -> RasterScan:
 				NBD += 1 # increment NBD
 				direction = 2 # LEFT
 				parent.append(LNBD)
-				#print("#001: parent.append=", LNBD)
-				#print("#0001")
-				#print(_img._img)
 				var contour:Contour = _border_follow(_img, cell0, cell2, direction, NBD)
 				direction = contour.direction
 				_img = contour.img
@@ -269,7 +190,6 @@ func raster_scan(image: Image) -> RasterScan:
 				border_type.append(1) # 上が 0
 				if border_type[NBD-2]==1:
 					parent.append(parent[NBD-2])
-					#print("#002: parent.append=", parent[NBD-2], ", NBD=",NBD)
 				else:
 					if _img.get_value_i(i, j) != 1 :
 						LNBD = abs(_img.get_value_i(i, j))
@@ -282,8 +202,6 @@ func raster_scan(image: Image) -> RasterScan:
 				if _img.get_value(cell0) > 1:
 					LNBD = _img.get_value(cell0)
 				parent.append(LNBD)
-				#print("#003: parent.append=", LNBD)
-				#print("#0003")
 				var contour = _border_follow(_img, cell0, cell2, direction, NBD)
 				direction = contour.direction
 				_img = contour.img
@@ -293,7 +211,6 @@ func raster_scan(image: Image) -> RasterScan:
 				border_type.append(0) # 下が 0
 				if border_type[NBD-2]==0:
 					parent.append(parent[NBD-2])
-					#print("#004: parent.append=", parent[NBD-2], ", NBD=",NBD)
 				else:
 					if _img.get_value(cell0) != 1:
 						LNBD = abs(_img.get_value(cell0))
@@ -302,7 +219,6 @@ func raster_scan(image: Image) -> RasterScan:
 	_raster_scan.contours = contours
 	_raster_scan.parent = parent
 	_raster_scan.border_type = border_type
-	#print("#9001")
 	return _raster_scan
 	
 var scan_img:ScanImage	

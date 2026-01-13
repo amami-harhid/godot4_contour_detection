@@ -8,8 +8,6 @@ func _ready() -> void:
 
 func _test01()->void:
 	contour_detection = ContourDetection.new()
-	contour_detection.call_test()
-	#return
 	var image:Image = sprite.texture.get_image()
 	var _texture:ImageTexture = ImageTexture.new()
 	var _image:Image = Image.create(image.get_size().x+10, image.get_size().y+10, false, Image.FORMAT_RGBA8)
@@ -22,8 +20,6 @@ func _test01()->void:
 	#var parent = obj.parent
 	#ar border_type = obj.border_type
 	#print("contours=", contours)
-	#print("parent=", parent)
-	#print("border_type=",border_type)
 	var _contours:Array[Contour] = obj.contours.duplicate(true)
 	var _cell_arr:Array[Cell]=[]
 	for contour:Contour in _contours:
@@ -31,7 +27,6 @@ func _test01()->void:
 			_cell_arr.append(cell)
 	_cell_arr.sort_custom(self._custom_sort2)
 	for cell:Cell in _cell_arr:
-		#print("cell=",cell)
 		_image.set_pixel(cell.j, cell.i, Color(0,0,0,1))
 		#await get_tree().create_timer(0.01).timeout
 		_texture.set_image(_image)
