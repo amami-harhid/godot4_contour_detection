@@ -12,10 +12,16 @@ Direction
                 3
 
 """
+#
+# 方向を変える量
+#
 class DireRotation:
-	const Clockwise:int = -2
-	const Counterclockwise:int = 2
+	const Clockwise:int = -2 # 時計回り
+	const Counterclockwise:int = 2 # 反時計回り
 
+#
+# 方向
+#
 class Direction:
 	const RIGHT:int = 0
 	const UP:int = 1
@@ -27,13 +33,15 @@ class Direction:
 	func set_direction(_dir:int)->void:
 		_direction = _dir	
 		
-
+#
+# 境界の種類
+#
 class Border:
 	const Outer:int = 1
 	const Hole:int = 0
 
 #
-# 
+# 向き(Direction)を変えて次候補を決め、引数(exam)を上書きする
 #
 func _next_cell(curr_pixel:Cell,direction:Direction, exam:Cell)->CellInfo:
 	var _curr_pixel:Cell = curr_pixel.duplicate()
@@ -57,6 +65,9 @@ func _next_cell(curr_pixel:Cell,direction:Direction, exam:Cell)->CellInfo:
 	# Return an object instead of a tuple
 	return _next_cell_info
 
+#
+# 境界を追跡し、境界情報(contour)を返す
+#
 func _border_follow(img:ScanImage,start:Cell, prev:Cell, direction:Direction, NBD:int)->Contour:
 	var _start:Cell = start.duplicate()
 	var _prev:Cell = prev.duplicate()
@@ -119,6 +130,9 @@ func _border_follow(img:ScanImage,start:Cell, prev:Cell, direction:Direction, NB
 			break
 	return contour
 
+#
+# 画像を２値化したうえで走査し、境界情報を追跡する
+#
 func raster_scan(image: Image) -> RasterScan:
 	self.scan_img = ScanImage.new(image)
 	var _img:ScanImage = scan_img
@@ -133,13 +147,12 @@ func raster_scan(image: Image) -> RasterScan:
 		for j in range(1, _img.cols-1): # 横方向
 			var cell0:Cell = Cell.new(i,j)
 			if _img.get_value(cell0) == ScanImage.ON and _img.get_value_i(i, j-1)==ScanImage.OFF:
-				var cell2:Cell = Cell.new(i, j-1)
 				# if Outer border
+				var cell2:Cell = Cell.new(i, j-1)
 				NBD += 1 # increment NBD
 				direction._direction = Direction.LEFT
 				parent.append(LNBD)
 				var contour:Contour = _border_follow(_img, cell0, cell2, direction, NBD)
-				#contour.parent = LNBD
 				contours.append(contour)
 				border_type.append( Border.Outer ) # Outer border=1
 				if border_type[NBD-2]==Border.Outer:
@@ -157,7 +170,6 @@ func raster_scan(image: Image) -> RasterScan:
 					LNBD = _img.get_value(cell0)
 				parent.append(LNBD)
 				var contour = _border_follow(_img, cell0, cell2, direction, NBD)
-				#contour.parent = LNBD  # for debug
 				contours.append(contour)
 				border_type.append( Border.Hole) # Hole border = 0
 				if border_type[NBD-2]== Border.Hole:
@@ -174,9 +186,9 @@ func raster_scan(image: Image) -> RasterScan:
 	
 var scan_img:ScanImage
 
-'''
-ScanImage
-'''
+#
+# ScanImageクラス
+#
 class ScanImage:
 	const ON = 1
 	const OFF = 0
@@ -245,9 +257,9 @@ class ScanImage:
 			if 0 <= i and 0 <= j and i < rows and j < cols:
 				self._img.get(i).set(j, value)
 
-'''
-Cell
-'''
+#
+# Cell クラス
+#
 class Cell:
 	var i:int
 	var j:int
@@ -282,9 +294,9 @@ class Cell:
 	func _to_string() -> String:
 		return "[i=%d,j=%d]"%[i,j]
 
-'''
-Contour
-'''
+#
+# Contourクラス
+#
 class Contour:
 
 	var _contour:Array[Cell]
@@ -295,11 +307,6 @@ class Contour:
 	var direction:int
 	var img:ScanImage
 	
-#'''
-#	func set_parent(_parent:int)->void:
-#		for _cell:Cell in _contour:
-#			_cell.parent = _parent
-#'''
 	func _init():
 		self._contour = []
 		self._regex = RegEx.new()
@@ -324,15 +331,18 @@ class Contour:
 			return "[" + _str2 + "]"
 		return ""
 
-'''
-CellInfo
-'''
+#
+# CellInfo クラス
+#
 class CellInfo:
 	
 	var exam: Cell
 	var new_dir:Direction = Direction.new()
 	var save:Cell
 
+#
+# RasterScan クラス
+#
 class RasterScan:
 
 	var contours:Array[Contour]
