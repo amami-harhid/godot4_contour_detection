@@ -17,7 +17,7 @@ func _test01()->void:
 	self.texture = _texture
 	#await get_tree().create_timer(0.5).timeout
 	var contour_detection = viewer.contour_detection
-	var img:ScanImage = contour_detection.scan_img
+	var img:ContourDetection.ScanImage = contour_detection.scan_img
 	print("_image size=",_image.get_size())
 	print("img size=", img._img.size(),",", img._img.get(0).size())
 	print("rows,cols=", img.rows,",", img.cols)
