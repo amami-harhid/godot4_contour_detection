@@ -51,12 +51,13 @@ but I rewrote it using GDScript.
 
     # get contours
 	var _contour_detection:ContourDetection = ContourDetection.new()
-	var obj_detection = _contour_detection.raster_scan(org_image)
+	var obj_detection:ContourDetection.RasterScan = _contour_detection.raster_scan(org_image)
 
     # draw contours
-	for _contour in obj_detection.contours:
-		for cell:Cell in _contour.list():
-			_image.set_pixel(cell.j, cell.i, Color(0,0,0,1))
+	for _contour::ContourDetection.Contour in obj_detection.contours:
+		for cell:ContourDetection.Cell in _contour.list():
+			var _pos = cell.to_vector2()
+			_image.set_pixel(_pos.x, _pos.y, Color(0,0,0,1))
 			_texture.set_image(_image)
 			self.texture = _texture
             await get_tree().create_timer(0.01).timeout
