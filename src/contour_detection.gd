@@ -1,6 +1,7 @@
 ## ContourDetection class
 ## Suzuki85 edge detection program code written in GDScript.
 ## Original code was written in Python ( Rajdeep Mondal ).  
+## Version 0.0.5
 class_name ContourDetection
 
 ## 方向回転量
@@ -85,6 +86,25 @@ class ScanImage:
 							_img_rows.append(OFF)
 				_img.append(_img_rows)
 		_img_init = _img.duplicate()
+		# Debug用
+		#_img = _threshold_test()
+		#_img_init = _img.duplicate()
+
+	func _threshold_test()->Array[Array]:
+		var _arr:Array[Array] = [
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0],
+			[0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0],
+			[0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0],
+			[0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0],
+			[0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0],
+			[0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0],
+			[0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		]
+		self.rows = 9
+		self.cols = 19
+		return _arr
 
 	## ピクセルを取得
 	## @param img Image
@@ -177,10 +197,24 @@ class Cell:
 class Contour:
 	## セル情報の配列
 	var _contour:Array[Cell]
+	# 親情報
+	#var _parent:int = 0
+	
+	## 順番
+	var _nbd: int = 0
 	
 	func _init():
 		self._contour = []
-
+		
+	#func set_parent(parent:int)->void:
+	#	self._parent = parent
+	
+	func get_nbd()->int:
+		return self._nbd
+	
+	func set_nbd(nbd:int)->void:
+		self._nbd = nbd
+	
 	## セル情報を追加する
 	func append(element: Cell)->void:
 		_contour.append(element)
@@ -230,6 +264,17 @@ class ContoursInfo:
 	## 親情報の配列を返す
 	func parent_list()->Array[int]:
 		return self.parents
+		
+	func sorted_list()->Array[Contour]:
+		var _arr = self.contours.duplicate(true)
+		_arr.sort_custom(self.custom_sort)
+		return _arr
+		
+	func custom_sort(a: Contour, b: Contour)->bool:
+		if a._nbd < b._nbd:
+			return true
+		return false
+
 
 ## 輪郭抽出用クラス
 class Detection:
@@ -309,6 +354,7 @@ class Detection:
 					_save = null
 				elif (_save == null or (_save != null and img.get_value(_save)!=ScanImage.OFF)) and img.get_value(_curr)==ScanImage.ON:
 					img.set_value(_curr, NBD)
+							 
 				else:
 					pass
 				_prev = _curr.duplicate()
@@ -341,15 +387,23 @@ class Detection:
 					var cell2:Cell = Cell.new(i, j-1)
 					NBD += 1 # increment NBD
 					direction._direction = Direction.LEFT
+#					if _img.get_value(cell0) > ScanImage.ON:
+#						LNBD = _img.get_value(cell0)
+					#print("[0] outer, cell0=",cell0,",LNBD=",LNBD)
 					parents.append(LNBD)
 					var contour:Contour = _border_follow(_img, cell0, cell2, direction, NBD)
+					#--- debug
+					#_debug(_img,"[raster_scan outer]")
+
+					#contour.set_parent( parents.get( parents.size()-1 ) )
+					contour.set_nbd(NBD)
 					contours.append(contour)
 					border_types.append( Border.Outer ) # Outer border=1
-					if border_types[NBD-2]==Border.Outer:
-						parents.append(parents[NBD-2])
+					if border_types.get(NBD-2)==Border.Outer:
+						parents.append(parents.get(NBD-2))
 					else:
-						if _img.get_value_i(i, j) != ScanImage.ON :
-							LNBD = abs(_img.get_value_i(i, j))
+						if _img.get_value(cell0) != 1 :
+							LNBD = abs(_img.get_value(cell0))
 				
 				elif _img.get_value(cell0) >= ScanImage.ON and _img.get_value_i(i, j+1)==ScanImage.OFF: 
 					# if Hole border 
@@ -360,17 +414,16 @@ class Detection:
 						LNBD = _img.get_value(cell0)
 					parents.append(LNBD)
 					var contour = _border_follow(_img, cell0, cell2, direction, NBD)
+					contour.set_nbd(NBD)
 					contours.append(contour)
 					border_types.append( Border.Hole) # Hole border = 0
 					if border_types[NBD-2]== Border.Hole:
-						parents.append(parents[NBD-2])
+						parents.append(parents.get(NBD-2))
 					else:
-						if _img.get_value(cell0) != ScanImage.ON:
+						if _img.get_value(cell0) != 1:
 							LNBD = abs(_img.get_value(cell0))
-
 		var _contours_info = ContoursInfo.new()
 		_contours_info.contours = contours
 		_contours_info.parents = parents
 		_contours_info.border_types = border_types
 		return _contours_info
-	
