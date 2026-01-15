@@ -20,8 +20,8 @@ func _test01()->void:
 	self.texture = _texture
 
 	# Viewerノードの contour_detectionを参照し２値画像を取得する
-	var contour_detection = viewer.contour_detection
-	var img:ContourDetection.ScanImage = contour_detection.scan_img
+	var _detection = viewer.detection
+	var img:ContourDetection.ScanImage = _detection.scan_img
 	
 	# ２値画像を描画する
 	for i in img.cols:
